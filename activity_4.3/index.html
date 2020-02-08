@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>activity_4.3</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="card template" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="#" class="card-link">Card link</a>
+              <a href="#" class="card-link">Another link</a>
+            </div>
+        </div>
+
+        <script>
+            // Chicago data API endpoint
+            let api = 'https://data.cityofchicago.org/resource/xzkq-xp2w.json?$LIMIT=100';
+
+            // Query the API for employee data
+            fetch(api)
+                .then(response => response.json())
+                .then(json => {
+                    json.forEach(record => {
+                        // Log record object for reference
+                        console.log(record);
+
+                        // Generate card for record
+                        let template = document.querySelector('div.template');
+                        let clone = template.cloneNode(true);
+                        clone.classList.remove('template');
+                        clone.querySelector('.card-title').textContent = record.name;
+                        clone.querySelector('.card-subtitle').textContent = record.department;
+                        clone.querySelector('.card-text').textContent = record.annual_salary;
+                        document.body.appendChild(clone);
+                    });
+                })
+                .catch(error => console.log(error));
+        </script>
+    </body>
+</html>

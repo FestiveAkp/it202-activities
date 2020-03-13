@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>activity_9.1</title>
+        <link href="https://unpkg.com/material-components-web@v4.0.0/dist/material-components-web.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <script src="https://unpkg.com/material-components-web@v4.0.0/dist/material-components-web.min.js"></script>
+        <style>
+            :root {
+                --mdc-theme-primary: #3ab496;
+            }
+            
+            body {
+                margin: 0;
+            }
+
+            .view {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <header class="mdc-top-app-bar">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                    <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
+                    <span class="mdc-top-app-bar__title">Title</span>
+                </section>
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+                    <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Download">file_download</button>
+                    <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Print this page">print</button>
+                    <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Bookmark this page">bookmark</button>
+                </section>
+            </div>
+        </header>
+
+        <aside class="mdc-drawer mdc-drawer--modal">
+            <div class="mdc-drawer__content">
+                <nav class="mdc-list">
+                    <a class="mdc-list-item mdc-list-item--activated" href="#home" aria-current="page">
+                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">home</i>
+                        <span class="mdc-list-item__text">Home</span>
+                    </a>
+                    <a class="mdc-list-item" href="#data">
+                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">pets</i>
+                        <span class="mdc-list-item__text">Data</span>
+                    </a>
+                    <a class="mdc-list-item" href="#about">
+                        <i class="material-icons mdc-list-item__graphic" aria-hidden="true">info</i>
+                        <span class="mdc-list-item__text">About</span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+    
+        <div class="mdc-drawer-scrim"></div>
+        
+        <main class="mdc-top-app-bar--fixed-adjust">
+            <div class="view" id="home">Home</div>
+            <div class="view" id="data">Data</div>
+            <div class="view" id="about">About</div>
+
+            <!-- <button class="mdc-button mdc-button--raised foo-button">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label">Button</span>
+            </button> -->
+        </main>
+
+        <script>
+            // mdc.ripple.MDCRipple.attachTo(document.querySelector('.mdc-button'));
+            mdc.topAppBar.MDCTopAppBar.attachTo(document.querySelector('.mdc-top-app-bar'));
+            
+            const drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
+            const topAppBarMenuButton = document.querySelector('.mdc-top-app-bar__navigation-icon');
+            
+            topAppBarMenuButton.addEventListener('click', () => {
+                drawer.open = true;
+            });
+
+            const hideViews = () => {
+                const items = document.querySelectorAll('div.view');
+                items.forEach(item => {
+                    item.style.display = 'none';
+                });
+            }
+
+            const menuItems = document.querySelectorAll('aside.mdc-drawer a.mdc-list-item');
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', e => {
+                    hideViews();
+                    const destView = item.getAttribute('href');
+                    document.querySelector(destView).style.display = 'block';
+                    drawer.open = false;
+                });
+            });
+        </script>
+    </body>
+</html>

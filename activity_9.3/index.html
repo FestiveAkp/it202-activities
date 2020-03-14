@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>activity_9.3</title>
+        <link href="https://unpkg.com/material-components-web@v4.0.0/dist/material-components-web.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <script src="https://unpkg.com/material-components-web@v4.0.0/dist/material-components-web.min.js"></script>
+    </head>
+    <body>
+        <!-- Interact buttons -->
+        <button id="GRAF" class="mdc-button mdc-button--raised data-button">
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label">Graffiti Removal Request</span>
+        </button>
+        <button id="SFD" class="mdc-button mdc-button--raised data-button">
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label">Street Light Out Complaint</span>
+        </button>
+        <button id="CSF" class="mdc-button mdc-button--raised data-button">
+            <div class="mdc-button__ripple"></div>
+            <span class="mdc-button__label">Consumer Fraud Complaint</span>
+        </button>
+
+        <!-- Data Display -->
+        <div id="data">
+            <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list">
+                <!-- Dynamically generated -->
+            </ul>
+        </div>
+
+        <script>
+            const api = 'https://data.cityofchicago.org/resource/v6vf-nfxy.json?';
+
+            const buttonList = document.querySelectorAll('.data-button');
+            const dataList = document.querySelector('ul.mdc-list');
+
+            // Handle click events for each button
+            buttonList.forEach(button => {
+                button.addEventListener('click', e => {
+                    // On click, clear list contents and fetch respective data
+                    dataList.textContent = '';
+
+                    const shortCode = button.getAttribute('id');
+
+                    fetch(api + '$LIMIT=5&sr_short_code=' + shortCode)
+                        .then(response => response.json())
+                        .then(data => {
+                            // For each record in the response, create a data list item
+                            data.forEach(record => {
+                                const primaryText = document.createElement('span');
+                                primaryText.className = 'mdc-list-item__primary-text';
+                                primaryText.textContent = record.sr_number;
+
+                                const secondaryText = document.createElement('span');
+                                secondaryText.className = 'mdc-list-item__secondary-text';
+                                secondaryText.textContent = record.street_address;
+
+                                const icon = document.createElement('span');
+                                icon.className = 'mdc-list-item__graphic material-icons';
+                                switch (shortCode) {
+                                    case 'GRAF':
+                                        icon.textContent = 'format_paint';
+                                        break;
+                                    case 'SFD':
+                                        icon.textContent = 'highlight';
+                                        break;
+                                    case 'CSF':
+                                        icon.textContent = 'attach_money';
+                                        break;
+                                }
+
+                                const textWrapper = document.createElement('span');
+                                textWrapper.className = 'mdc-list-item__text';
+
+                                const newListItem = document.createElement('li');
+                                newListItem.className = 'mdc-list-item';
+
+                                textWrapper.appendChild(primaryText);
+                                textWrapper.appendChild(secondaryText);
+
+                                newListItem.appendChild(icon);
+                                newListItem.appendChild(textWrapper);
+
+                                dataList.appendChild(newListItem);
+                            });
+                        });
+                });
+            });
+        </script>
+    </body>
+</html>
